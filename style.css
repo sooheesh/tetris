@@ -109,14 +109,14 @@ div#ans3 {
 .header {
     margin-right: 0px;
     margin-left: auto;
-    height: 50px;
+    height: 45px;
 }
 
 .logo {
     font-size: 25px;
     font-weight: 100;
     margin: 0;
-    height: 50px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -127,7 +127,7 @@ div#ans3 {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 55px;
+    height: 45px;
     background-color: #fafafa;
     border-bottom: 1px solid #e6e6e6;
     color: #999;
@@ -157,7 +157,7 @@ a#lvl, a#lvl:hover {
     border-spacing: 1px;
     border-collapse: separate;
     position: absolute;
-    top: 105px;
+    top: 90px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -174,7 +174,7 @@ a#lvl, a#lvl:hover {
     color: #999;
     background-color: rgba(0,0,0,0.2);
     position: absolute;
-    top: 105px;
+    top: 90px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -259,10 +259,10 @@ a#lvl, a#lvl:hover {
         height: 12vw;
     }
     .menu {
-        height: 14vw;
+        height: 12vw;
     }
     .tetris-table {
-        top: 26vw;
+        top: 24vw;
     }
     .tetris-table td {
         width: 5vw;
@@ -278,7 +278,7 @@ a#lvl, a#lvl:hover {
         width: 25vw;
     }
     .game-end {
-        top: 26vw;
+        top: 24vw;
     }
     .dropdown, .lvl, .exp {
         margin-right: 2vw;
