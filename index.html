@@ -1,85 +1,84 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html ng-app="tetris">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <%--<script src="<c:url value="/resources/js/jquery-3.2.1.min.js"/>"></script>--%>
-    <%--font--%>
+    <!--font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=VT323">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
+    <link rel="stylesheet" href="style.css"/>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="controller.js" ></script>
 
     <title>Tetris</title>
-
-
-
 </head>
-<body>
+<body ng-controller="MainCtrl" ng-cloak>
 
-<div class="body"></div>
 
-<%--헤더--%>
-<table id="header">
+    <!--헤더-->
+    <div class="header">
+        <div class="logo">sooheesong.com</div>
 
-    <%--로그인 이름--%>
-    <td class="dropdown">
-        <button class="id btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">
-            ${authInfo.name}
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="<c:url value="/edit/changePassword" />">[비밀번호 변경]</a></li>
-            <li><a href="<c:url value="/logout" />">[로그아웃]</a></li>
-        </ul>
-    </td>
-    <%--끝 - 로그인 이름--%>
+        <div class="menu">
+        <!--로그인 이름-->
+        <!--<div class="dropdown">-->
+            <!--<button class="id btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">-->
+                <!--{{userNameList[userNameIdx]}}-->
+            <!--</button>-->
+            <!--<ul class="dropdown-menu">-->
+                <!--<li><a href="#">[비밀번호 변경]</a></li>-->
+                <!--<li><a href="#">[로그아웃]</a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--끝 - 로그인 이름-->
 
-    <%--레벨정보--%>
-    <td>
-        <button class="lvl btn btn-link" type="button">
-            <a id="lvl" href="<c:url value="/rank" />">Lv. ${authInfo.level}</a>
-        </button>
-    </td>
-    <%--끝 - 레벨정보--%>
-
-    <%--경험치 정보--%>
-    <td class="exp">
-        <div class="progress">
-            <div id="pro" class="progress-bar" style="width:${authInfo.point}%"></div>
-            <div id="min" class="progress-bar"></div>
+            <!--<div class="game-logo">-->
+                <!--<img src="img/Tetris-350x288.png">-->
+            <!--</div>-->
+            <div class="game-title">TETRIS</div>
+        <!--레벨정보-->
+        <div>
+            <button class="lvl btn btn-link" type="button">
+                <a id="lvl" href="#">Lv. 0</a>
+            </button>
         </div>
-    </td>
-    <%--끝 - 경험치 정보--%>
+        <!--끝 - 레벨정보-->
 
-</table>
-<%--끝 - 헤더--%>
+        <!--경험치 정보-->
+        <div class="exp">
+            <div class="progress">
+                <div id="pro" class="progress-bar"></div>
+                <div id="min" class="progress-bar"></div>
+            </div>
+        </div>
+        <!--끝 - 경험치 정보-->
+</div>
+    </div>
+<!--끝 - 헤더-->
 
     <table class="tetris-table">
         <tbody>
-            <c:forEach var = "i" begin = "1" end = "22">
-                <tr>
-                    <c:forEach var="k" begin="0" end="9">
-                        <td class="td${i}${k}"></td>
-                    </c:forEach>
+                <!--1 - 22-->
+                <tr ng-repeat="r in range(22) track by $index">
+                    <!--0 - 9-->
+                    <td ng-repeat="d in range(10) track by $index" class="td{{r+1}}{{d}}"></td>
                 </tr>
-            </c:forEach>
         </tbody>
     </table>
-    <div class="game-end" style="display:none;">
-        <div style="height:200px"></div>
-        <%--다시하기 버튼--%>
-        <button id="replay" onclick="replay()" class="btn btn-default">replay</button>
-        <%--끝 - 다시하기 버튼--%>
+    <div class="game-end" style="display: none;">
+        <!--다시하기 버튼-->
+        <button id="replay" onclick="replay()" class="btn btn-default replay">replay</button>
+        <!--끝 - 다시하기 버튼-->
     </div>
 
-    <div id="key"></div>
+    <div id="key" style="display: none;"></div>
 </body>
 </html>
 
@@ -103,11 +102,13 @@
     var min = [], max = [];
 
     var line = 0, cnt = 0;
-    var point = ${authInfo.point}, level = ${authInfo.level};
+    var point = 0, level = 0;
     var newPoint, oldPoint, minPoint;
     var color;
 
     var clean;
+    var game_end = false;
+
 
     //블럭 종류별로 생성
     var blocks = [];
@@ -185,46 +186,47 @@
         console.log(event);
         key.innerHTML = event.code;
 
-        switch(event.code) {
-            case "ArrowLeft":
-                if(stop == false)
-                    go_left();
-                break;
-            case "ArrowRight":
-                if(stop == false)
-                    go_right();
-                break;
-            case "Escape":
-                if(stop == false) {
-                    stop_block();
-                } else {
-                    block_down(downtime);
-                }
-                stop = !stop;
-                break;
-            case "Space":
-                if(block == ""){
-                    create_block();
-                }else if(stop == true){
-                    block_down();
+        if(game_end === false) {
+            switch(event.code) {
+                case "ArrowLeft":
+                    if(stop == false)
+                        go_left();
+                    break;
+                case "ArrowRight":
+                    if(stop == false)
+                        go_right();
+                    break;
+                case "Escape":
+                    if(stop == false) {
+                        stop_block();
+                    } else {
+                        block_down(downtime);
+                    }
                     stop = !stop;
-                }else if(stop == false){
-                    // 블럭을 맨 밑으로
-                    spacebar();
-                }
-                break;
-            case "ArrowDown":
-                go_down();
-                break;
-            case "ArrowUp":
-                rotate_left();
-                break;
+                    break;
+                case "Space":
+                    if(block == ""){
+                        create_block();
+                    }else if(stop == true){
+                        block_down();
+                        stop = !stop;
+                    }else if(stop == false){
+                        // 블럭을 맨 밑으로
+                        spacebar();
+                    }
+                    break;
+                case "ArrowDown":
+                    go_down();
+                    break;
+                case "ArrowUp":
+                    rotate_left();
+                    break;
 
-            case "KeyC":
-                row_clean();
-                break;
+                case "KeyC":
+                    row_clean();
+                    break;
+            }
         }
-
     });
 
     function create_block(){
@@ -278,9 +280,10 @@
 
         }else{
            //게임종료
+            game_end = true;
             stop_block();
-            $(".tetris-table").css("display", "none");
-            $(".game-end").css("display", "block");
+            // $(".tetris-table").css("display", "none");
+            $(".game-end").css("display", "flex");
         }
     }
 
@@ -600,7 +603,6 @@
 
 
     function point_line(){
-        var header = document.getElementById("header");
         var min = document.getElementById("min");
         var pro = document.getElementById("pro");
         var lvl = document.getElementById("lvl");
@@ -622,7 +624,7 @@
             $(min).css("transition", "width .6s ease");
             $(pro).css("transition", "width .6s ease");
 
-            $(min).css("background-color", "rgb(123, 227, 93)");
+            $(min).css("background-color", "rgba(0, 0, 0, 0.2)");
 
             //점수가 100 이상이면 레벨 업
             if(newPoint >= 100) {
@@ -657,7 +659,7 @@
                     lvl.innerHTML = "Lv. " + level;
                     $(lvl).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
                     setTimeout(function(){
-                        $(lvl).css("color", "black");
+                        $(lvl).css("color", "#999");
                     }, 1600);
                 }, 1400);
 
