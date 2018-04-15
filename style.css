@@ -265,8 +265,8 @@ a#lvl, a#lvl:hover {
         top: 26vw;
     }
     .tetris-table td {
-        width: 6vw;
-        height: 6vw;
+        width: 5vw;
+        height: 5vw;
     }
     .btn.id {
         font-size: 3.5vw;
