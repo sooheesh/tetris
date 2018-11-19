@@ -233,6 +233,8 @@
 	document.addEventListener("touchstart", function(event) {
 		touchstartX = event.touches[0].clientX;
 		touchstartY = event.touches[0].clientY;
+		touchendX = event.touches[0].clientX;
+		touchendY = event.touches[0].clientY;
 	});
 	document.addEventListener("touchmove", function(event) {
 		touchendX = event.touches[0].clientX;
