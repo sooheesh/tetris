@@ -11,8 +11,8 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-*, button {
-    touch-action: manipulation;
+* {
+    -webkit-user-select: none;
 }
 
 /*baseball*/

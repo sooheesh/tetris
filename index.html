@@ -293,11 +293,7 @@
 				}
 			}
 
-			now = (new Date()).getTime();
-			if (now - lastTouchEnd <= 300) {
-				event.preventDefault();
-			}
-			lastTouchEnd = now;
+            event.preventDefault();
 
             // if (Math.abs(touchendY - touchstartY) > 15 || Math.abs(touchendX - touchstartX) > 15) {
             //     // left
