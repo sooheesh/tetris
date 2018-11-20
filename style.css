@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
 
+* {
+    -webkit-user-select: none;
+}
+
 html,
 body {
     position:fixed;
@@ -9,10 +13,6 @@ body {
     bottom:0;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
-}
-
-* {
-    -webkit-user-select: none;
 }
 
 /*baseball*/

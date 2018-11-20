@@ -229,8 +229,8 @@
         }
     });
 
-    var touchstartX, touchstartY, touchendX, touchendY, angle;
-	var move, movestartX, movestartY, moved, wentDown;
+    var touchstartX, touchstartY, touchendX, touchendY, angle, touchstartT, touchendT;
+	var move, movestartX, movestartY, moved, wentDown, rotateleft;
 	document.addEventListener("touchstart", function(event) {
 		touchstartX = event.touches[0].clientX;
 		touchstartY = event.touches[0].clientY;
@@ -241,6 +241,8 @@
 		move = false;
 		moved = false;
 		wentDown = false;
+		touchstartT = (new Date()).getTime();
+		rotateleft = false;
 	});
 
 	document.addEventListener("touchmove", function(event) {
@@ -275,8 +277,14 @@
 		}
 
 	});
-	var now, lastTouchEnd = 0;
+
 	document.addEventListener("touchend", function(event) {
+
+		touchendT = (new Date()).getTime();
+		if (!moved && touchendT - touchstartT <= 300) {
+            rotateleft = true;
+		}
+
 		if(game_end === false) {
 
 			if (block == "") {
@@ -288,47 +296,12 @@
 				if (wentDown) {
 					// 블럭을 맨 밑으로
 					spacebar();
-				} else if (!moved) {
+				} else if (!moved && rotateleft) {
 					rotate_left();
 				}
 			}
 
             event.preventDefault();
-
-            // if (Math.abs(touchendY - touchstartY) > 15 || Math.abs(touchendX - touchstartX) > 15) {
-            //     // left
-            //     if ((angle < -135 && angle >= -180) || (angle > 135 && angle <= 180)) {
-            //         if(stop == false)
-            //             go_left();
-            //     }
-            //
-            //     // right
-            //     if ((angle > -45 && angle <= 0) || (angle >= 0 && angle < 45)) {
-            //         if(stop == false)
-            //             go_right();
-            //     }
-            //
-            //     // up
-            //     if (angle > -135 && angle < -45) {
-            //         rotate_left();
-            //     }
-            //
-            //     // down
-            //     if (angle > 45 && angle < 135) {
-            //         go_down();
-            //     }
-            //
-            // } else {
-            //     if (block == "") {
-            //         create_block();
-            //     } else if (stop == true) {
-            //         block_down();
-            //         stop = !stop;
-            //     } else if (stop == false) {
-            //         // 블럭을 맨 밑으로
-            //         spacebar();
-            //     }
-            // }
 	    }
 
 	});
