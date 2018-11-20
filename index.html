@@ -230,26 +230,27 @@
     });
 
     var touchstartX, touchstartY, touchendX, touchendY, angle;
+	var move, movestartX, movestartY, moved, wentDown;
 	document.addEventListener("touchstart", function(event) {
 		touchstartX = event.touches[0].clientX;
 		touchstartY = event.touches[0].clientY;
 		touchendX = event.touches[0].clientX;
 		touchendY = event.touches[0].clientY;
+		movestartX = touchstartX;
+		movestartY = touchstartY;
 		move = false;
+		moved = false;
+		wentDown = false;
 	});
-	// var distanceX = 0, distanceY = 0;
-	var move;
+
 	document.addEventListener("touchmove", function(event) {
 		touchendX = event.touches[0].clientX;
 		touchendY = event.touches[0].clientY;
 		angle = Math.atan2(touchendY - touchstartY, touchendX - touchstartX) * 180 / Math.PI;
 
-		// if (Math.abs(touchstartX - touchendX) > distanceX || Math.abs(touchstartY - touchendY) > distanceY) {
-		// 	console.log(Math.abs(touchstartX - touchendX));
-		// 	move = true;
-        // }
-
-        if (Math.abs(touchendY - touchstartY) > 10 || Math.abs(touchendX - touchstartX) > 10) {
+        if (!move && Math.abs(touchendY - movestartY) > 15 || Math.abs(touchendX - movestartX) > 15) {
+			movestartX = touchendX;
+			movestartY = touchendY;
 			move = true;
 		}
 
@@ -257,17 +258,20 @@
             // left
             if ((angle < -135 && angle >= -180) || (angle > 135 && angle <= 180)) {
                 go_left();
+				wentDown = false;
             }
             // right
             if ((angle > -45 && angle <= 0) || (angle >= 0 && angle < 45)) {
                 go_right();
-            }
+				wentDown = false;
+			}
 			// down
 			if (angle > 45 && angle < 135) {
 				go_down();
+				wentDown = true;
 			}
-			// distanceX = Math.abs(touchstartX - touchendX);
-			// distanceY = Math.abs(touchstartY - touchendY);
+			move = false;
+			moved = true;
 		}
 
 	});
@@ -280,10 +284,10 @@
 				block_down();
 				stop = !stop;
 			} else if (stop == false) {
-				if (move) {
+				if (wentDown) {
 					// 블럭을 맨 밑으로
 					spacebar();
-				} else {
+				} else if (!moved) {
 					rotate_left();
 				}
 			}
@@ -328,7 +332,9 @@
 	});
 
 	function create_block(){
-        h_loc = 3;
+		move = false;
+
+		h_loc = 3;
 
         // 0~6 랜덤 숫자 생성 (최대, 최소값 포함: Math.floor(Math.random() * (max - min + 1)) + min;)
         idx = Math.floor(Math.random() * (6 + 1));
