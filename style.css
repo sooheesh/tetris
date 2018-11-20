@@ -11,6 +11,10 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
+*, button {
+    touch-action: manipulation;
+}
+
 /*baseball*/
 .btn.id, .btn.lvl {
     padding: 0;
