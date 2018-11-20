@@ -235,50 +235,94 @@
 		touchstartY = event.touches[0].clientY;
 		touchendX = event.touches[0].clientX;
 		touchendY = event.touches[0].clientY;
+		move = false;
 	});
+	// var distanceX = 0, distanceY = 0;
+	var move;
 	document.addEventListener("touchmove", function(event) {
 		touchendX = event.touches[0].clientX;
 		touchendY = event.touches[0].clientY;
+		angle = Math.atan2(touchendY - touchstartY, touchendX - touchstartX) * 180 / Math.PI;
+
+		// if (Math.abs(touchstartX - touchendX) > distanceX || Math.abs(touchstartY - touchendY) > distanceY) {
+		// 	console.log(Math.abs(touchstartX - touchendX));
+		// 	move = true;
+        // }
+
+        if (Math.abs(touchendY - touchstartY) > 10 || Math.abs(touchendX - touchstartX) > 10) {
+			move = true;
+		}
+
+		if(!game_end && !stop && move) {
+            // left
+            if ((angle < -135 && angle >= -180) || (angle > 135 && angle <= 180)) {
+                go_left();
+            }
+            // right
+            if ((angle > -45 && angle <= 0) || (angle >= 0 && angle < 45)) {
+                go_right();
+            }
+			// down
+			if (angle > 45 && angle < 135) {
+				go_down();
+			}
+			// distanceX = Math.abs(touchstartX - touchendX);
+			// distanceY = Math.abs(touchstartY - touchendY);
+		}
+
 	});
 	document.addEventListener("touchend", function(event) {
-		angle = Math.atan2(touchendY - touchstartY, touchendX - touchstartX) * 180 / Math.PI;
-		console.log(touchendY, touchstartY, touchendX, touchstartX, Math.abs(touchendY - touchstartY), Math.abs(touchendX - touchstartX), angle);
 		if(game_end === false) {
 
-            if (Math.abs(touchendY - touchstartY) > 15 || Math.abs(touchendX - touchstartX) > 15) {
-                // left
-                if ((angle < -135 && angle >= -180) || (angle > 135 && angle <= 180)) {
-                    if(stop == false)
-                        go_left();
-                }
+			if (block == "") {
+				create_block();
+			} else if (stop == true) {
+				block_down();
+				stop = !stop;
+			} else if (stop == false) {
+				if (move) {
+					// 블럭을 맨 밑으로
+					spacebar();
+				} else {
+					rotate_left();
+				}
+			}
 
-                // right
-                if ((angle > -45 && angle <= 0) || (angle >= 0 && angle < 45)) {
-                    if(stop == false)
-                        go_right();
-                }
 
-                // up
-                if (angle > -135 && angle < -45) {
-                    rotate_left();
-                }
-
-                // down
-                if (angle > 45 && angle < 135) {
-                    go_down();
-                }
-
-            } else {
-                if (block == "") {
-                    create_block();
-                } else if (stop == true) {
-                    block_down();
-                    stop = !stop;
-                } else if (stop == false) {
-                    // 블럭을 맨 밑으로
-                    spacebar();
-                }
-            }
+            // if (Math.abs(touchendY - touchstartY) > 15 || Math.abs(touchendX - touchstartX) > 15) {
+            //     // left
+            //     if ((angle < -135 && angle >= -180) || (angle > 135 && angle <= 180)) {
+            //         if(stop == false)
+            //             go_left();
+            //     }
+            //
+            //     // right
+            //     if ((angle > -45 && angle <= 0) || (angle >= 0 && angle < 45)) {
+            //         if(stop == false)
+            //             go_right();
+            //     }
+            //
+            //     // up
+            //     if (angle > -135 && angle < -45) {
+            //         rotate_left();
+            //     }
+            //
+            //     // down
+            //     if (angle > 45 && angle < 135) {
+            //         go_down();
+            //     }
+            //
+            // } else {
+            //     if (block == "") {
+            //         create_block();
+            //     } else if (stop == true) {
+            //         block_down();
+            //         stop = !stop;
+            //     } else if (stop == false) {
+            //         // 블럭을 맨 밑으로
+            //         spacebar();
+            //     }
+            // }
 	    }
 
 	});
