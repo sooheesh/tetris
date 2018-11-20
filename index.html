@@ -250,7 +250,7 @@
 		touchendY = event.touches[0].clientY;
 		angle = Math.atan2(touchendY - touchstartY, touchendX - touchstartX) * 180 / Math.PI;
 
-        if (!move && Math.abs(touchendY - movestartY) > 15 || Math.abs(touchendX - movestartX) > 15) {
+        if (!move && Math.abs(touchendY - movestartY) > 30 || Math.abs(touchendX - movestartX) > 15) {
 			movestartX = touchendX;
 			movestartY = touchendY;
 			move = true;
