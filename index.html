@@ -275,6 +275,7 @@
 		}
 
 	});
+	var now, lastTouchEnd = 0;
 	document.addEventListener("touchend", function(event) {
 		if(game_end === false) {
 
@@ -292,6 +293,11 @@
 				}
 			}
 
+			now = (new Date()).getTime();
+			if (now - lastTouchEnd <= 300) {
+				event.preventDefault();
+			}
+			lastTouchEnd = now;
 
             // if (Math.abs(touchendY - touchstartY) > 15 || Math.abs(touchendX - touchstartX) > 15) {
             //     // left
