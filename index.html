@@ -344,17 +344,15 @@
             console.log("blocks : " + JSON.stringify(blocks));
             block_edge();
 
-            if(line < 4){
-                downtime = 1000;
-            }else if(line < 8){
-                downtime = 700;
-            }else if(line < 12){
-                downtime = 500;
-            }else if(line < 16){
-                downtime = 400;
-            }else{
-                downtime = 300;
-            }
+			if (line < 4) {
+				downtime = 1000;
+			} else if (line < 8) {
+				downtime = 800;
+			} else if (line < 12) {
+				downtime = 600;
+			} else {
+				downtime = 500;
+			}
             block_down(downtime);
 
         }else{
