@@ -1075,12 +1075,11 @@
         $(min).css("width", "0");
         $(pro).css("transition", "width .6s ease");
         $(pro).css("width", newPoint + "%");
-        $(lvl).css("color", "#0b5ed7");
         lvl.innerHTML = "Lv. " + level;
-        $(lvl).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
-        setTimeout(function () {
-          $(lvl).css("color", "#fff");
-        }, 1600);
+        $(lvl).fadeOut().fadeIn().fadeOut().fadeIn();
+        // setTimeout(function () {
+        //   $(lvl).css("color", "#fff");
+        // }, 1600);
       }, 1400);
 
       //레벨에 변동이 없으면
